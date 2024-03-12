@@ -1,54 +1,46 @@
 using ETicaretAPI.Application.Abstractions;
 using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : ControllerBase // TEST CONTROLLER
     {
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
+        private readonly IOrderWriteRepository _orderWriteRepository;
+        private readonly ICustomerWriteRepository _customerWriteRepository;
+        private readonly IOrderReadRepository _orderReadRepository;
 
         public ProductsController(IProductWriteRepository productWriteRepository,
-            IProductReadRepository productReadRepository)
+            IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository,
+            ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _orderWriteRepository = orderWriteRepository;
+            _customerWriteRepository = customerWriteRepository;
+            _orderReadRepository = orderReadRepository;
         }
 
         [HttpGet]
         public async Task Get()
         {
-            await _productWriteRepository.AddRangeAsync(new()
-            {
-                new() { Id = Guid.NewGuid(), Name = "Product 1", Price = 100, CreatedDate = DateTime.UtcNow, Stock = 10 },
-                new() { Id = Guid.NewGuid(), Name = "Product 2", Price = 200, CreatedDate = DateTime.UtcNow, Stock = 20 },
-                new() { Id = Guid.NewGuid(), Name = "Product 3", Price = 300, CreatedDate = DateTime.UtcNow, Stock = 30 }
-            });
-            await _productWriteRepository.SaveAsync();
+            var order = await _orderReadRepository.GetByIdAsync("3b358efd-3f5d-46d1-be47-ab00d7ec868b");
+            order.Address = "Avcılar, İstanbul";
+            order.Description = "Güncellendi";
+            await _orderWriteRepository.SaveAsync();
         }
 
-        // private readonly IProductService _productService;
-        //
-        // public ProductsController(IProductService productService)
-        // {
-        //     _productService = productService;
-        // }
-        //
-        // [HttpGet]
-        // public IActionResult Get()
-        // {
-        //     var products = _productService.GetProducts();
-        //     return Ok(products);
-        // }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var product = await _productReadRepository.GetByIdAsync(id);
             return Ok();
         }
-        
     }
 }
