@@ -17,14 +17,18 @@ public class ETicaretAPIDbContext : DbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // ChangeTracker : Entityler üzerinden yapılan değişiklikleri takip eder.
+        // ChangeTracker : Entityler üzerinden yapılan değişiklikleri takip eder ya da
+        // yeni eklenen verinin yakalanmasını sağlayan property. Update operasyonlarında
+        // Track edilen verileri yakalayıp elde etmeyi sağlar.
+        
         var datas = ChangeTracker.Entries<BaseEntity>();
         foreach (var data in datas)
         {
             _ = data.State switch
             {
                 EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
-                EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow
+                EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
+                _ => DateTime.UtcNow
             };
         }
 
