@@ -1,5 +1,8 @@
-﻿using ETicaretAPI.Application.Services;
+﻿using ETicaretAPI.Application.Abstractions.Storage;
+using ETicaretAPI.Infrastructure.Enums;
 using ETicaretAPI.Infrastructure.Services;
+using ETicaretAPI.Infrastructure.Services.Storage;
+using ETicaretAPI.Infrastructure.Services.Storage.Local;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +12,31 @@ public static class ServiceRegistration
 {
     public static void AddInfrastructureServices(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IFileService, FileService>();
+        serviceCollection.AddScoped<IStorageService, StorageService>();
+    }
+
+    public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : class, IStorage
+    {
+        serviceCollection.AddScoped<IStorage, T>();
+    }
+
+    public static void AddStorage(this IServiceCollection serviceCollection, StorageType storageType)
+    {
+        switch (storageType)
+        {
+            case StorageType.Local:
+                serviceCollection.AddScoped<IStorage, LocalStorage>();
+                break;
+            case StorageType.Azure:
+                // serviceCollection.AddScoped<IStorage, AzureStorage>();
+                break;
+            case StorageType.Aws:
+                break;
+            case StorageType.S3:
+                break;
+            default:
+                serviceCollection.AddScoped<IStorage, LocalStorage>();
+                break;
+        }
     }
 }
