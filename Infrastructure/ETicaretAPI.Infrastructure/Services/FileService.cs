@@ -30,7 +30,7 @@ public class FileService : IFileService
         {
             var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
             var result = await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
-            datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
+            datas.Add((fileNewName, $"{path}\\{fileNewName}"));
             results.Add(result);
         }
 
@@ -113,17 +113,14 @@ public class FileService : IFileService
             throw;
         }
     }
-}
-
-
-
-/* Kod Optimize hali
- public async Task<string> FileRenameAsync(string path, string fileName, bool first = true)
+    
+    
+  async Task<string> FileRenameAsync2(string path, string fileName, bool isUnique = true)
     {
         string extension = Path.GetExtension(fileName);
         string newFileName = fileName;
 
-        if (first)
+        if (isUnique)
         {
             string oldName = Path.GetFileNameWithoutExtension(fileName);
             newFileName = $"{NameOperation.CharacterRegulatory(oldName)}{extension}";
@@ -158,5 +155,55 @@ public class FileService : IFileService
 
         return newFileName;
     }
+ 
+    public async Task<string> FileRenameAsync3(string path, string fileName, bool isUnique = true)
+    {
+        string extension = Path.GetExtension(fileName);
+        string newFileName = fileName;
 
-    */
+        if (isUnique)
+        {
+            string oldName = Path.GetFileNameWithoutExtension(fileName);
+            newFileName = $"{NameOperation.CharacterRegulatory(oldName)}{extension}";
+        }
+        else
+        {
+            int indexNo = newFileName.LastIndexOf("-");
+            int dotIndex = newFileName.LastIndexOf(".");
+        
+            if (indexNo == -1 || dotIndex <= indexNo)
+            {
+                newFileName = $"{Path.GetFileNameWithoutExtension(newFileName)}-2{extension}";
+            }
+            else
+            {
+                string fileNo = newFileName.Substring(indexNo + 1, dotIndex - indexNo - 1);
+                if (int.TryParse(fileNo, out int fileNumber))
+                {
+                    fileNumber++;
+                    newFileName = $"{newFileName.Substring(0, indexNo + 1)}{fileNumber}{extension}";
+                }
+                else
+                {
+                    newFileName = $"{Path.GetFileNameWithoutExtension(newFileName)}-2{extension}";
+                }
+            }
+        }
+
+        string newPath = Path.Combine(path, newFileName);
+        if (File.Exists(newPath))
+        {
+            return await FileRenameAsync(path, newFileName, false);
+        }
+
+        return newFileName;
+    }
+    
+    
+}
+
+
+
+
+
+    
