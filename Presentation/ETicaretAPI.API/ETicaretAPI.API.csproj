@@ -27,4 +27,27 @@
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\cross-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\cross-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\cross.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\CV_ErenOĞUZ_PHOTO.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\delete-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\delete-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\delete.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\deleteiconred-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\deleteiconred-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\deleteiconred.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\edit-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\edit-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\edit-4.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\edit-5.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\edit.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\FOTOGRAF-2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\FOTOGRAF.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\HOBBYCARToplamFiyatListesi19-04-2024.xlsx" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\IMG_8431.JPG" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\files\IVD-Alindi-b10DXVKEP5DQ.pdf" />
+    </ItemGroup>
+
 </Project>
