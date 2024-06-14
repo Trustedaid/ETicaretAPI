@@ -114,33 +114,34 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Upload()
+    public async Task<IActionResult> Upload(string id)
     {
-        var datas = await _storageService.UploadAsync("files", Request.Form.Files);
-        // var datas =  await _fileService.UploadAsync("resource/files", Request.Form.Files);
+        var result = await _storageService.UploadAsync("photo-images", Request.Form.Files);
 
+        var product = await _productReadRepository.GetByIdAsync(id);
 
-        await _productImageFileWriteRepository.AddRangeAsync(datas.Select(x => new ProductImageFile()
+        // foreach (var x in result)
+        // {
+        //     product.ProductImageFiles.Add(new()
+        //     {
+        //         FileName = x.fileName,
+        //         Path = x.pathOrContainerName,
+        //         Storage = _storageService.StorageName,
+        //         Products = new List<Product>() {product}
+        //     });
+        //
+        // }
+        
+        await _productImageFileWriteRepository.AddRangeAsync(result.Select(x => new ProductImageFile
         {
             FileName = x.fileName,
             Path = x.pathOrContainerName,
-            Storage = _storageService.StorageName
+            Storage = _storageService.StorageName,
+            Products = new List<Product>() {product}
         }).ToList());
+        
         await _productImageFileWriteRepository.SaveAsync();
 
-
-        // await _fileWriteRepository.AddRangeAsync(datas.Select(x => new File()
-        // {
-        //     FileName = x.fileName,
-        //     Path = x.path
-        // }).ToList());
-        // await _fileWriteRepository.SaveAsync();
-        //
-
-
-        // var d1 = _fileReadRepository.GetAll(false);
-        // var d2 = _productReadRepository.GetAll(false);
-        // var d3 = _productReadRepository.GetAll(false);
         return Ok();
     }
 }
