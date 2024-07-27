@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ETicaretAPI.Application.Features.Commands.AppUser.CreateAppUser;
+using ETicaretAPI.Application.Features.Commands.AppUser.GoogleLogin;
 using ETicaretAPI.Application.Features.Commands.AppUser.LoginAppUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,13 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
     {
         var response = await _mediator.Send(loginUserCommandRequest);
+        return Ok(response);
+    }
+    
+    [HttpPost("Google-Login")]
+    public async Task<IActionResult> GoogleLogin(GoogleLoginUserCommandRequest googleLoginUserCommandRequest)
+    {
+        var response = await _mediator.Send(googleLoginUserCommandRequest);
         return Ok(response);
     }
 }
