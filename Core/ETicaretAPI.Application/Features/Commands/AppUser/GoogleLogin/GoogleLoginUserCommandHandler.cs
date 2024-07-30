@@ -24,8 +24,8 @@ public class
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings()
         {
-             Audience = new List<string>{"YOUR_CLIENT_ID"}
-            //Audience = new List<string> { "622372834950-f44qev133neei81frlgf69o22cu8a7kg.apps.googleusercontent.com" }
+             //Audience = new List<string>{"YOUR_CLIENT_ID"}
+            Audience = new List<string> { "622372834950-f44qev133neei81frlgf69o22cu8a7kg.apps.googleusercontent.com" }
         };
         var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
 
