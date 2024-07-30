@@ -30,24 +30,5 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("[action]")]
-    public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
-    {
-        var response = await _mediator.Send(loginUserCommandRequest);
-        return Ok(response);
-    }
-    
-    [HttpPost("Google-Login")]
-    public async Task<IActionResult> GoogleLogin(GoogleLoginUserCommandRequest googleLoginUserCommandRequest)
-    {
-        var response = await _mediator.Send(googleLoginUserCommandRequest);
-        return Ok(response);
-    }
-    
-    [HttpPost("Facebook-Login")]
-    public async Task<IActionResult> FacebookLogin(FacebookLoginUserCommandRequest facebookLoginUserCommandRequest)
-    {
-        var response = await _mediator.Send(facebookLoginUserCommandRequest);
-        return Ok(response);
-    }
+   
 }

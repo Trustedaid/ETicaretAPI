@@ -1,4 +1,6 @@
 ﻿using ETicaretAPI.Application.Abstractions;
+using ETicaretAPI.Application.Abstractions.Services;
+using ETicaretAPI.Application.Abstractions.Services.Authentication;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.File;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
@@ -7,6 +9,7 @@ using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Concretes;
 using ETicaretAPI.Persistence.Contexts;
 using ETicaretAPI.Persistence.Repositories;
+using ETicaretAPI.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -49,5 +52,12 @@ public static class ServiceRegistration
         services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
         services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
         
+        
+        
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IExternalAuthentication, AuthService>();
+        services.AddScoped<IInternalAuthentication, AuthService>();
+
     }
 }
