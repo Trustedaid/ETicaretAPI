@@ -4,7 +4,8 @@ namespace ETicaretAPI.Application.Abstractions.JWT;
 
 public interface ITokenHandler
 {
-    Token CreateAccessToken(int minute);
+    Token CreateAccessToken(int second);
+    string CreateRefreshToken();
     
     
 }

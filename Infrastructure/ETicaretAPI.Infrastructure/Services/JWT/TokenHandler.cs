@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using ETicaretAPI.Application.Abstractions.JWT;
 using ETicaretAPI.Application.DTOs;
@@ -16,7 +17,7 @@ public class TokenHandler : ITokenHandler
         _configuration = configuration;
     }
 
-    public Token CreateAccessToken(int minute)
+    public Token CreateAccessToken(int second)
     {
         Token token = new();
         //SecurityKey'in simetriğini oluşturuyoruz.
@@ -24,10 +25,10 @@ public class TokenHandler : ITokenHandler
 
         //Şifrelenmiş kimliği oluşturuyoruz.
         SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
-        
+
         // Oluşturulacak Token ayarlarını veriyoruz.
-        token.Expiration = DateTime.UtcNow.AddMinutes(minute);
-        
+        token.Expiration = DateTime.UtcNow.AddSeconds(second);
+
         JwtSecurityToken securityToken = new(
             audience: _configuration["Token:Audience"],
             issuer: _configuration["Token:Issuer"],
@@ -39,7 +40,19 @@ public class TokenHandler : ITokenHandler
         //Token oluşturucu sınıfını kullanarak bir örnek alıyoruz.
         JwtSecurityTokenHandler tokenHandler = new();
         token.AccessToken = tokenHandler.WriteToken(securityToken);
+        
+        token.RefreshToken = CreateRefreshToken();
 
         return token;
+    }
+
+    public string CreateRefreshToken()
+    {
+        byte[] number = new byte[32];
+        using var random = RandomNumberGenerator.Create();
+        random.GetBytes(number);
+
+
+        return Convert.ToBase64String(number);
     }
 }
