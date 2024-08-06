@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using ETicaretAPI.Application.Abstractions.JWT;
 using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,7 +19,7 @@ public class TokenHandler : ITokenHandler
         _configuration = configuration;
     }
 
-    public Token CreateAccessToken(int second)
+    public Token CreateAccessToken(int second, AppUser user)
     {
         Token token = new();
         //SecurityKey'in simetriğini oluşturuyoruz.
@@ -34,7 +36,8 @@ public class TokenHandler : ITokenHandler
             issuer: _configuration["Token:Issuer"],
             expires: token.Expiration,
             notBefore: DateTime.UtcNow,
-            signingCredentials: signingCredentials
+            signingCredentials: signingCredentials,
+            claims: new List<Claim>{new (ClaimTypes.Name, user.UserName)}
         );
 
         //Token oluşturucu sınıfını kullanarak bir örnek alıyoruz.

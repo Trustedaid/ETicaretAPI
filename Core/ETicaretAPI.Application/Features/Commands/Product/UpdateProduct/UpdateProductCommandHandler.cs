@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ETicaretAPI.Application.Features.Commands.Product.UpdateProduct;
 
@@ -7,12 +8,14 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
+    private readonly ILogger<UpdateProductCommandHandler> _logger;
 
     public UpdateProductCommandHandler(IProductReadRepository productReadRepository,
-        IProductWriteRepository productWriteRepository)
+        IProductWriteRepository productWriteRepository, ILogger<UpdateProductCommandHandler> logger)
     {
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
+        _logger = logger;
     }
 
     public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request,
@@ -23,6 +26,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         product.Name = request.Name;
         product.Price = request.Price;
         await _productWriteRepository.SaveAsync();
+        _logger.LogInformation("Product updated. ProductId: {ProductId}", product.Id);
         return new UpdateProductCommandResponse();
     }
 }

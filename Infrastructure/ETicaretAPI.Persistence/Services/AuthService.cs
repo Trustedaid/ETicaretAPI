@@ -59,7 +59,7 @@ public class AuthService : IAuthService
         if (result)
         {
             await _userManager.AddLoginAsync(user, info);
-            var token = _tokenHandler.CreateAccessToken(accessTokenExpiration);
+            var token = _tokenHandler.CreateAccessToken(accessTokenExpiration, user);
             await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 5);
             return token;
         }
@@ -111,7 +111,7 @@ public class AuthService : IAuthService
         var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         if (result.Succeeded)
         {
-            var token = _tokenHandler.CreateAccessToken(accessTokenExpiration);
+            var token = _tokenHandler.CreateAccessToken(accessTokenExpiration, user);
             await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 15);
             return token;
         }
@@ -125,7 +125,7 @@ public class AuthService : IAuthService
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
         if (user != null && user.RefreshTokenEndDate > DateTime.UtcNow)
         {
-            var token = _tokenHandler.CreateAccessToken(15);
+            var token = _tokenHandler.CreateAccessToken(15, user);
             await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 15);
             return token;
         }
