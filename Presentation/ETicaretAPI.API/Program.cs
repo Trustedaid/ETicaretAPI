@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using ETicaretAPI.API.Configurations.ColumnWriters;
+using ETicaretAPI.API.Extensions;
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.Validators.Products;
 using ETicaretAPI.Infrastructure;
@@ -16,6 +17,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Sinks.PostgreSQL;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +107,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 
 app.UseStaticFiles();
 
