@@ -9,6 +9,8 @@ using ETicaretAPI.Infrastructure.Filters;
 using ETicaretAPI.Infrastructure.Services.Storage.Azure;
 using ETicaretAPI.Infrastructure.Services.Storage.Local;
 using ETicaretAPI.Persistence;
+using ETicaretAPI.SignalR;
+using ETicaretAPI.SignalR.Hubs;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -25,6 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalRServices();
 
 // ------------ Add services to configure storage type ---------------------\\
 // builder.Services.AddStorage<LocalStorage>();
@@ -32,7 +35,7 @@ builder.Services.AddStorage<AzureStorage>();
 
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
-    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+    builder.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials()
 ));
 
 Logger log = new LoggerConfiguration()
@@ -110,17 +113,18 @@ if (app.Environment.IsDevelopment())
 
 app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 
+
 app.UseStaticFiles();
 
 app.UseSerilogRequestLogging();
 app.UseHttpLogging();
 
-app.UseCors();
+app.UseCors(); // CORS middleware  (Cross-Origin Resource Sharing) allows client-side applications to interact with the server.
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // Redirects HTTP requests to HTTPS
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); // Authentication middleware
+app.UseAuthorization(); // Authorization middleware
 
 app.Use(async (context, next) =>
 {
@@ -130,5 +134,7 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+
+app.MapHubs(); // MapHubs extension method
 
 app.Run();

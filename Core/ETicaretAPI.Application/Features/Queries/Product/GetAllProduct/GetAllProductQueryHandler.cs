@@ -19,7 +19,7 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("GetAllProductQueryRequest");
-        throw new Exception("Hata alındı!");
+        // throw new Exception("Hata alındı!");
         var totalCount = _productReadRepository.GetAll(false).Count();
         var products = _productReadRepository.GetAll(false)
             .Skip(request.Page * request.Size).Take(request.Size)
