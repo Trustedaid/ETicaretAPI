@@ -3,6 +3,7 @@ using ETicaretAPI.Application.Features.Commands.Product.CreateProduct;
 using ETicaretAPI.Application.Features.Commands.Product.RemoveProduct;
 using ETicaretAPI.Application.Features.Commands.Product.UpdateProduct;
 using ETicaretAPI.Application.Features.Commands.ProductImageFile.RemoveProductImage;
+using ETicaretAPI.Application.Features.Commands.ProductImageFile.SetShowcaseImage;
 using ETicaretAPI.Application.Features.Commands.ProductImageFile.UploadProductImage;
 using ETicaretAPI.Application.Features.Queries.Product.GetAllProduct;
 using ETicaretAPI.Application.Features.Queries.Product.GetByIdProduct;
@@ -15,7 +16,6 @@ namespace ETicaretAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = "Admin")]
 public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -40,6 +40,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Post(CreateProductCommandRequest createProductCommandRequest)
     {
         var response = await _mediator.Send(createProductCommandRequest);
@@ -47,6 +48,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
     {
         var response = await _mediator.Send(updateProductCommandRequest);
@@ -54,6 +56,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{Id}")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
     {
         var response = await _mediator.Send(removeProductCommandRequest);
@@ -61,6 +64,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost("[action]")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Upload(
         [FromQuery] UploadProductImageCommandRequest uploadProductImageCommandRequest)
     {
@@ -70,6 +74,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("[action]/{Id}")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> GetProductImages(
         [FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
     {
@@ -78,11 +83,21 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("[action]/{Id}")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> DeleteProductImage(
         [FromRoute] RemoveProductImageCommandRequest removeProductImageCommandRequest, [FromQuery] string imageId)
     {
         removeProductImageCommandRequest.ImageId = imageId;
         var response = await _mediator.Send(removeProductImageCommandRequest);
+        return Ok(response);
+    }
+    
+    [HttpGet("[action]")]
+    [Authorize(AuthenticationSchemes = "Admin")]
+    public async Task<IActionResult> SetShowcaseImage(
+        [FromQuery] SetShowcaseImageCommandRequest setShowcaseImageCommandRequest)
+    {
+        var response = await _mediator.Send(setShowcaseImageCommandRequest);
         return Ok(response);
     }
 }

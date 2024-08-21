@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct;
@@ -22,7 +23,7 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
         // throw new Exception("Hata alındı!");
         var totalCount = _productReadRepository.GetAll(false).Count();
         var products = _productReadRepository.GetAll(false)
-            .Skip(request.Page * request.Size).Take(request.Size)
+            .Skip(request.Page * request.Size).Take(request.Size).Include(x => x.ProductImageFiles)
             .Select(x => new
             {
                 x.Id,
@@ -30,7 +31,8 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
                 x.Stock,
                 x.Price,
                 x.CreatedDate,
-                x.UpdatedDate
+                x.UpdatedDate,
+                x.ProductImageFiles
             }).ToList();
 
         return new()
