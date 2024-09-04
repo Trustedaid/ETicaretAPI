@@ -9,5 +9,6 @@ public class Product : BaseEntity
     public float Price { get; set; }
     public ICollection<Order> Orders { get; set; }
     public ICollection<ProductImageFile> ProductImageFiles { get; set; }
+    public ICollection<CartItem> CartItems { get; set; }
     
 }

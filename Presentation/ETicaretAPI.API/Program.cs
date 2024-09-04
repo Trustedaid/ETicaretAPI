@@ -24,6 +24,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor(); // Client'ın request'ine katmalarda ki classlardan erişmek için HttpContextAccessor eklenir.
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();

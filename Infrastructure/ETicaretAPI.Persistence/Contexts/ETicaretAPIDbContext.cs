@@ -20,6 +20,19 @@ public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<File> Files { get; set; }
     public DbSet<ProductImageFile> ProductImageFiles { get; set; }
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Order>().HasKey(x => x.Id);
+
+        builder.Entity<Cart>()
+            .HasOne(x => x.Order)
+            .WithOne(o => o.Cart)
+            .HasForeignKey<Order>(x => x.Id);
+        base.OnModelCreating(builder);
+    }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
