@@ -39,7 +39,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
         return query;
     }
 
-    public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
+    public async Task<T?> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
     {
         var query = Table.AsQueryable();
         if (!tracking)

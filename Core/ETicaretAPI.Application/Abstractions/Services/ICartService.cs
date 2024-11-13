@@ -9,5 +9,6 @@ public interface ICartService
     public Task AddItemToCartAsync(VMCreateCartItem cartItem);
     public Task UpdateCartItemAsync(VMUpdateCartItem cartItem);
     public Task RemoveCartItemAsync(string cartItemId);
-    
+    public Cart? GetUserActiveCart { get; }
+
 }

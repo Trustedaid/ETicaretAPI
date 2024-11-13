@@ -21,6 +21,7 @@ public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQueryRequest
         {
             CartItemId = x.Id.ToString(),
             Name = x.Product.Name,
+            Price = x.Product.Price,
             Quantity = x.Quantity
         }).ToList();
         

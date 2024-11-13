@@ -1,6 +1,7 @@
 ﻿namespace ETicaretAPI.SignalR;
 
-public class ReceiveFunctionNames
+public static class ReceiveFunctionNames
 {
-    public const string ReceiveProductAddedMessage = "receiveProductAddedMessage";
+    public const string ProductAddedMessage = "receiveProductAddedMessage";
+    public const string OrderAddedMessage = "receiveOrderAddedMessage";
 }

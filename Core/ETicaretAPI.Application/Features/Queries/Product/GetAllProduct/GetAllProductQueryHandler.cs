@@ -10,7 +10,8 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
     private readonly IProductReadRepository _productReadRepository;
     private readonly ILogger<GetAllProductQueryHandler> _logger;
 
-    public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger)
+    public GetAllProductQueryHandler(IProductReadRepository productReadRepository,
+        ILogger<GetAllProductQueryHandler> logger)
     {
         _productReadRepository = productReadRepository;
         _logger = logger;

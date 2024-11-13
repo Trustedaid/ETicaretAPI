@@ -26,6 +26,8 @@ public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Order>().HasKey(x => x.Id);
+        
+        builder.Entity<Order>().HasIndex(o=> o.OrderCode).IsUnique();
 
         builder.Entity<Cart>()
             .HasOne(x => x.Order)

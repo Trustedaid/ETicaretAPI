@@ -37,10 +37,11 @@ public class CartService : ICartService
 
     private async Task<Cart?> ContextUser()
     {
-        var username = _httpContextAccessor?.HttpContext?.User.Identity?.Name;
+        var username = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
         if (!string.IsNullOrEmpty(username))
         {
-            var user = await _userManager.Users.Include(u => u.Carts)
+            var user = await _userManager.Users
+                .Include(u => u.Carts)
                 .FirstOrDefaultAsync(u => u.UserName == username);
 
             var basket = from cart in user.Carts
@@ -59,7 +60,7 @@ public class CartService : ICartService
                 targetCart = basket.FirstOrDefault(x => x.Order is null)?.Cart;
             else
             {
-                targetCart = new();
+                targetCart = new Cart();
                 user.Carts.Add(targetCart);
             }
 
@@ -91,15 +92,19 @@ public class CartService : ICartService
             var basketItem = await _cartItemReadRepository.GetSingleAsync(x =>
                 x.CartId == cart.Id && x.ProductId == Guid.Parse(cartItem.ProductId));
 
-            if (basketItem != null)
+            if (basketItem.Product != null)
+            {
                 basketItem.Quantity++;
+            }
             else
+            {
                 await _cartItemWriteRepository.AddAsync(new()
                 {
                     CartId = cart.Id,
                     ProductId = Guid.Parse(cartItem.ProductId),
                     Quantity = cartItem.Quantity
                 });
+            }
 
             await _cartItemWriteRepository.SaveAsync();
         }
@@ -123,6 +128,15 @@ public class CartService : ICartService
         {
             _cartItemWriteRepository.Remove(cartItem);
             await _cartItemWriteRepository.SaveAsync();
+        }
+    }
+
+    public Cart? GetUserActiveCart
+    {
+        get
+        {
+            var cart = ContextUser().Result;
+            return cart;
         }
     }
 }
