@@ -1,6 +1,8 @@
-﻿﻿using ETicaretAPI.Application.Abstractions.Storage;
+﻿using ETicaretAPI.Application.Abstractions.Storage;
 using ETicaretAPI.Application.Abstractions.JWT;
+using ETicaretAPI.Application.Abstractions.Services;
 using ETicaretAPI.Infrastructure.Enums;
+using ETicaretAPI.Infrastructure.Services;
 using ETicaretAPI.Infrastructure.Services.Storage;
 using ETicaretAPI.Infrastructure.Services.Storage.Azure;
 using ETicaretAPI.Infrastructure.Services.Storage.Local;
@@ -15,6 +17,7 @@ public static class ServiceRegistration
     {
         serviceCollection.AddScoped<IStorageService, StorageService>();
         serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
+        serviceCollection.AddScoped<IMailService, MailService>();
     }
 
     public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
@@ -30,7 +33,7 @@ public static class ServiceRegistration
                 serviceCollection.AddScoped<IStorage, LocalStorage>();
                 break;
             case StorageType.Azure:
-                 serviceCollection.AddScoped<IStorage, AzureStorage>();
+                serviceCollection.AddScoped<IStorage, AzureStorage>();
                 break;
             case StorageType.Aws:
                 break;

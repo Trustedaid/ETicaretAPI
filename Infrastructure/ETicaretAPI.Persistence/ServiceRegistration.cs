@@ -12,6 +12,7 @@ using ETicaretAPI.Persistence.Concretes;
 using ETicaretAPI.Persistence.Contexts;
 using ETicaretAPI.Persistence.Repositories;
 using ETicaretAPI.Persistence.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,7 @@ public static class ServiceRegistration
             options.Password.RequireDigit = false;
             options.User.RequireUniqueEmail = false;
             
-        } ).AddEntityFrameworkStores<ETicaretAPIDbContext>();
+        } ).AddEntityFrameworkStores<ETicaretAPIDbContext>().AddDefaultTokenProviders();
         
         services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
         services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
