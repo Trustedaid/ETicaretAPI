@@ -4,6 +4,7 @@ using ETicaretAPI.Application.Abstractions.Services.Authentication;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Cart;
 using ETicaretAPI.Application.Repositories.CartItem;
+using ETicaretAPI.Application.Repositories.CompletedOrder;
 using ETicaretAPI.Application.Repositories.File;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
@@ -60,6 +61,9 @@ public static class ServiceRegistration
         
         services.AddScoped<ICartItemReadRepository, CartItemReadRepository>();
         services.AddScoped<ICartItemWriteRepository, CartItemWriteRepository>();
+        
+        services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+        services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
         
         
         

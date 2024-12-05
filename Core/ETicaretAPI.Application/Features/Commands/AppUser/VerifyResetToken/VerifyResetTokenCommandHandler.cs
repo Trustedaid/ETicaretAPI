@@ -19,7 +19,7 @@ public class
       var state = await _authService.VerifyResetTokenAsync(request.ResetToken, request.UserId);
         return new VerifyResetTokenCommandResponse()
         {
-            State = state
+            State = true
         };
     }
 }

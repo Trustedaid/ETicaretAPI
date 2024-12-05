@@ -22,17 +22,24 @@ public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<CompletedOrders> CompletedOrders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Order>().HasKey(x => x.Id);
-        
-        builder.Entity<Order>().HasIndex(o=> o.OrderCode).IsUnique();
+
+        builder.Entity<Order>().HasIndex(o => o.OrderCode).IsUnique();
 
         builder.Entity<Cart>()
             .HasOne(x => x.Order)
             .WithOne(o => o.Cart)
             .HasForeignKey<Order>(x => x.Id);
+        
+        builder.Entity<Order>()
+            .HasOne(o => o.CompletedOrder)
+            .WithOne(c => c.Order)
+            .HasForeignKey<CompletedOrders>(c => c.OrderId);
+        
         base.OnModelCreating(builder);
     }
 
@@ -41,7 +48,7 @@ public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
         // ChangeTracker : Entityler üzerinden yapılan değişiklikleri takip eder ya da
         // yeni eklenen verinin yakalanmasını sağlayan property. Update operasyonlarında
         // Track edilen verileri yakalayıp elde etmeyi sağlar.
-        
+
         var datas = ChangeTracker.Entries<BaseEntity>();
         foreach (var data in datas)
         {
