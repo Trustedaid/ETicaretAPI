@@ -45,33 +45,26 @@ public class MailService : IMailService
     {
         var link = $"{_configuration["AngularClientUrl"]}/update-password/{userId}/{resetToken}";
 
-        
+
         var mail = new StringBuilder();
-        mail.AppendLine("Hello,<br> You have requested a password reset. Please click the link below to reset your password.");
-        mail.AppendLine($"<br><strong><a target=\"_blank\" href=\"{link}\">Click, for the new password request...</a></strong>");
+        mail.AppendLine(
+            "Hello,<br> You have requested a password reset. Please click the link below to reset your password.");
+        mail.AppendLine(
+            $"<br><strong><a target=\"_blank\" href=\"{link}\">Click, for the new password request...</a></strong>");
         mail.AppendLine("<br><br><span style=\"color:red;\">This link will expire in 1 hour.</span>");
         mail.AppendLine("<br>Best Regards,<br>Team ERYA");
 
-        
+
         await SendMailAsync(to, "Password Reset Request", mail.ToString());
+    }
+
+    public async Task SendCompletedOrderMailAsync(string to, string orderCode, DateTime orderDate, string userName,
+        string userLastName)
+    {
+        var mail = $"Hello {userName} {userLastName},<br> Your order has been completed. " +
+                   $"{orderDate} date with order code {orderCode}.<br>Thank you for shopping with us.";
+        
+        await SendMailAsync(to, $"your {orderCode} purchase numbered order has been completed", mail); 
         
     }
 }
-
-
-
-// StringBuilder mail = new StringBuilder();
-// mail.AppendLine("Hello,<br> You have requested a password reset." +
-//                 " Please click the link below to reset your password." +
-//                 "<br><strong><a target=\"_blank\"href=\"");
-// mail.AppendLine(_configuration["AngularClientUrl"]);
-// mail.AppendLine(_configuration["/update-password/"]);
-// mail.AppendLine(userId);
-// mail.AppendLine("/");
-// mail.AppendLine(resetToken);
-// mail.AppendLine("\">Click, for the new password request...</a></strong><br><br><span " +
-//                 "style=\"color:red;\">" +
-//                 "This link will expire in 1 hour.</span><br>Best Regards,<br>Team ERYA");
-//
-// var link = mail.ToString();
-// await SendMailAsync(to, "Password Reset Request", mail.ToString());
