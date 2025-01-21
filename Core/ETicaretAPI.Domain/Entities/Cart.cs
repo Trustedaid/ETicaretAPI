@@ -9,6 +9,6 @@ public class Cart : BaseEntity
    
     public AppUser User { get; set; }
     public Order Order { get; set; }
-    public ICollection<CartItem>  CartItems { get; set; }
+    public ICollection<CartItem> CartItems { get; set; }
     
 }
