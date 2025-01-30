@@ -36,9 +36,8 @@ public class RoleService : IRoleService
     public (object, int) GetAllRoles(int page, int size)
     {
         var query = _roleManager.Roles;
-        var data = query.Skip(page * size).Take(size).ToList();
-        var count = query.Count();
-        return (data, count);
+
+            return (query.Skip(page * size).Take(size).Select(r => new { r.Id, r.Name }), query.Count());
     }
 
     public async Task<(string id, string name)> GetRoleById(string id)

@@ -30,7 +30,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpGet]
         [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Roles", Menu = "Roles")]
-        public async Task<IActionResult> GetRoles(GetRolesQueryRequest getRolesQueryRequest)
+        public async Task<IActionResult> GetRoles([FromQuery]GetRolesQueryRequest getRolesQueryRequest)
         {
             var response = await _mediator.Send(getRolesQueryRequest);
             return Ok(response);

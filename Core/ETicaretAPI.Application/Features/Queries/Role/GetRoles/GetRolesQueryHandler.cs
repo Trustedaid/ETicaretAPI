@@ -15,7 +15,7 @@ public class GetRolesQueryHandler : IRequestHandler<GetRolesQueryRequest, GetRol
     public async Task<GetRolesQueryResponse> Handle(GetRolesQueryRequest request, CancellationToken cancellationToken)
     {
         var (data,count) = _roleService.GetAllRoles(request.Page, request.Size);
-        return new GetRolesQueryResponse()
+        return new ()
         {
             Data = data,
             TotalRoleCount = count
