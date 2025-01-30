@@ -73,6 +73,7 @@ public static class ServiceRegistration
         services.AddScoped<IInternalAuthentication, AuthService>();
         services.AddScoped<ICartService, CartService>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IRoleService, RoleService>();
 
     }
 }
