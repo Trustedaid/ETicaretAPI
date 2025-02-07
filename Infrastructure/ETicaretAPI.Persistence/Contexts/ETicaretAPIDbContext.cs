@@ -23,6 +23,8 @@ public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<CompletedOrders> CompletedOrders { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Endpoint> Endpoints { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
