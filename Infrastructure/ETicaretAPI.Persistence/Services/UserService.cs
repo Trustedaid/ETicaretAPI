@@ -2,6 +2,7 @@
 using ETicaretAPI.Application.DTOs.User;
 using ETicaretAPI.Application.Exceptions;
 using ETicaretAPI.Application.Helpers;
+using ETicaretAPI.Application.Repositories.Endpoint;
 using ETicaretAPI.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace ETicaretAPI.Persistence.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly IEndpointReadRepository _endpointReadRepository;
 
-    public UserService(UserManager<AppUser> userManager)
+    public UserService(UserManager<AppUser> userManager, IEndpointReadRepository endpointReadRepository)
     {
         _userManager = userManager;
+        _endpointReadRepository = endpointReadRepository;
     }
 
     public async Task<CreateUserResponse> CreateAsync(CreateUser model)
@@ -103,9 +106,14 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<string[]> GetRolesToUserAsync(string userId)
+    public async Task<string[]> GetRolesToUserAsync(string userIdOrName)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userIdOrName);
+        if (user == null)
+        {
+            await _userManager.FindByNameAsync(userIdOrName);
+        }
+
         if (user != null)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -113,6 +121,50 @@ public class UserService : IUserService
         }
 
         return new string[] { };
-        // return Array.Empty<string>();
+        // return Array.Empty<string>() suggested;
+    }
+
+    public async Task<bool> HasRolePermissionToEndpointAsync(string name, string code)
+    {
+        var userRoles = await GetRolesToUserAsync(name);
+        if (!userRoles.Any())
+            return false;
+        var endpoint = await _endpointReadRepository.Table
+            .Include(e => e.Roles)
+            .FirstOrDefaultAsync(e => e.Code == code);
+        if (endpoint == null)
+            return false;
+
+        var hasRole = false;
+        var endpointRoles = endpoint.Roles.Select(r => r.Name);
+
+        // foreach (var userRole in userRoles)
+        // {
+        //     if (!hasRole)
+        //     {
+        //         foreach (var endpointRole in endpointRoles)
+        //         {
+        //             if (userRole == endpointRole)
+        //             {
+        //                 hasRole = true;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     else
+        //         break;
+        // }
+        //
+        // return hasRole;
+
+        foreach (var userRole in userRoles)
+        {
+            foreach (var endpointRole in endpointRoles)
+                if (userRole == endpointRole)
+                    return true;
+        }
+
+        return false;
+
     }
 }

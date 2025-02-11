@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using ETicaretAPI.API.Configurations.ColumnWriters;
 using ETicaretAPI.API.Extensions;
+using ETicaretAPI.API.Filters;
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.Validators.Products;
 using ETicaretAPI.Infrastructure;
@@ -24,7 +25,8 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddHttpContextAccessor(); // Client'ın request'ine katmalarda ki classlardan erişmek için HttpContextAccessor eklenir.
+builder.Services
+    .AddHttpContextAccessor(); // Client'ın request'ine katmalarda ki classlardan erişmek için HttpContextAccessor eklenir.
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
@@ -36,7 +38,8 @@ builder.Services.AddStorage<AzureStorage>();
 
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
-    builder.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+    builder.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+        .AllowCredentials()
 ));
 
 Logger log = new LoggerConfiguration()
@@ -70,7 +73,11 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 });
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ValidationFilter>();
+        options.Filters.Add<RolePermissionFilter>();
+    })
     .AddFluentValidation(configuration =>
         configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);

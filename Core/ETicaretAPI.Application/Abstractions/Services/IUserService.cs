@@ -14,5 +14,6 @@ public interface IUserService
     Task<List<ListUser>> GetAllUsersAsync(int page, int size);
     int TotalUsersCount { get; }
     Task AssignRoleToUserAsync(string userId, string[] role);
-    Task<string[]>  GetRolesToUserAsync(string userId);
+    Task<string[]> GetRolesToUserAsync(string userIdOrName);
+    Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
 }
