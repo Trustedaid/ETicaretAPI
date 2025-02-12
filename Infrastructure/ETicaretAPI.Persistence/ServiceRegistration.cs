@@ -11,7 +11,6 @@ using ETicaretAPI.Application.Repositories.InvoiceFile;
 using ETicaretAPI.Application.Repositories.Menu;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities.Identity;
-using ETicaretAPI.Persistence.Concretes;
 using ETicaretAPI.Persistence.Contexts;
 using ETicaretAPI.Persistence.Repositories;
 using ETicaretAPI.Persistence.Services;
@@ -39,41 +38,42 @@ public static class ServiceRegistration
             options.User.RequireUniqueEmail = false;
         }).AddEntityFrameworkStores<ETicaretAPIDbContext>().AddDefaultTokenProviders();
 
-        // CustomerRepository //
+        // Read & Write Repositories
         services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
         services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
-        // OrderRepository //
+
         services.AddScoped<IOrderReadRepository, OrderReadRepository>();
         services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
-        // ProductRepository //
+
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
         services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
-        // FileRepository //
+
         services.AddScoped<IFileReadRepository, FileReadRepository>();
         services.AddScoped<IFileWriteRepository, FileWriteRepository>();
-        // ProductImageFileRepository //
+
         services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
         services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
-        // InvoiceFileRepository //
+
         services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
         services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
-        // CartRepository //
+
         services.AddScoped<ICartReadRepository, CartReadRepository>();
         services.AddScoped<ICartWriteRepository, CartWriteRepository>();
-        // CartItemRepository //
+
         services.AddScoped<ICartItemReadRepository, CartItemReadRepository>();
         services.AddScoped<ICartItemWriteRepository, CartItemWriteRepository>();
-        // CompletedOrderRepository //
+
         services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
         services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
-        // MenuRepository //
+
         services.AddScoped<IMenuReadRepository, MenuReadRepository>();
         services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
-        // EndpointRepository //
+
         services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
         services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
-        
-        
+
+
+        // Services can register here
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IExternalAuthentication, AuthService>();
@@ -82,5 +82,6 @@ public static class ServiceRegistration
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
+        services.AddScoped<IProductService, ProductService>();
     }
 }
