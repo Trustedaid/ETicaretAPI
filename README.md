@@ -60,7 +60,7 @@ ETicaretAPI is a robust e-commerce backend solution providing all the necessary 
 
 ## 🏗️ Project Structure
 
-The solution follows clean architecture principles:
+The solution follows Onion Architecture principles:
 
 ```
 ETicaretAPI/
